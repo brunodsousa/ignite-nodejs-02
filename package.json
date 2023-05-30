@@ -1,0 +1,12 @@
+{
+  "name": "ignite-nodejs-02",
+  "version": "1.0.0",
+  "description": "Desafio 02 da Trilha Node.js do Ignite - Rocketseat",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
