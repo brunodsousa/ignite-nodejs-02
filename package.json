@@ -4,9 +4,23 @@
   "description": "Desafio 02 da Trilha Node.js do Ignite - Rocketseat",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx watch src/server.ts",
+    "knex": "node --no-warnings --loader tsx ./node_modules/knex/bin/cli.js --knexfile ./knexfile.ts"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.1.1",
+    "tsx": "^3.12.7",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^8.3.0",
+    "dotenv": "^16.0.3",
+    "fastify": "^4.17.0",
+    "knex": "^2.4.2",
+    "sqlite3": "^5.1.6",
+    "zod": "^3.21.4"
+  }
 }
