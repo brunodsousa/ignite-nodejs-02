@@ -18,7 +18,7 @@ export async function usersRoutes(app: FastifyInstance) {
 
     const { id } = getUserParamSchema.parse(request.params);
 
-    const user = await knex("users").where("id", id).first();
+    const user = await knex("users").where({ id }).first();
 
     if (!user) {
       return reply.status(404).send("User not found.");
@@ -55,7 +55,7 @@ export async function usersRoutes(app: FastifyInstance) {
 
     const { id } = getUserParamSchema.parse(request.params);
 
-    const user = await knex("users").where("id", id).first();
+    const user = await knex("users").where({ id }).first();
 
     if (!user) {
       return reply.status(404).send("User not found.");
@@ -70,7 +70,7 @@ export async function usersRoutes(app: FastifyInstance) {
     const { name, email, password } = editUserParamSchema.parse(request.body);
 
     await knex("users")
-      .where("id", id)
+      .where({ id })
       .update({
         name: name || user.name,
         email: email || user.email,
@@ -86,12 +86,12 @@ export async function usersRoutes(app: FastifyInstance) {
 
     const { id } = getUserParamSchema.parse(request.params);
 
-    const user = await knex("users").where("id", id).first();
+    const user = await knex("users").where({ id }).first();
 
     if (!user) {
       return reply.status(404).send("User not found.");
     }
 
-    await knex("users").where("id", id).del();
+    await knex("users").where({ id }).del();
   });
 }
