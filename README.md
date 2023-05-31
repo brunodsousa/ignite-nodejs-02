@@ -5,7 +5,7 @@ Desafio 02 da Trilha Node.js do Ignite - Rocketseat**
 
 ## Regras da aplicação
 
-- [ ] Deve ser possível criar um usuário
+- [x] Deve ser possível criar um usuário
 - [ ] Deve ser possível identificar o usuário entre as requisições
 - [ ] Deve ser possível registrar uma refeição feita, com as seguintes informações:
 - Nome
@@ -22,3 +22,10 @@ Desafio 02 da Trilha Node.js do Ignite - Rocketseat**
 - Quantidade total de refeições fora da dieta
 - Melhor sequência por dia de refeições dentro da dieta
 - [ ] O usuário só pode visualizar, editar e apagar as refeições o qual ele criou
+
+## Adicionais
+
+- [x] Deve ser possível listar todos os usuários
+- [x] Deve ser possível buscar um usuário pelo ID
+- [x] Deve ser possível editar dados de um usuário
+- [x] Deve ser possível deletar um usuário
