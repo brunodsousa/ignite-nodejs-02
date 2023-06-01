@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { randomUUID } from "crypto";
-import { z } from "zod";
+import { string, z } from "zod";
 import { knex } from "../database";
 
 export async function usersRoutes(app: FastifyInstance) {
@@ -37,14 +37,39 @@ export async function usersRoutes(app: FastifyInstance) {
 
     const { name, email, password } = createUserBodySchema.parse(request.body);
 
-    await knex("users").insert({
-      id: randomUUID(),
-      name,
-      email,
-      password,
-    });
+    let sessionId = request.cookies.sessionId;
 
-    return reply.status(201).send();
+    if (sessionId) {
+      await knex("users").insert({
+        id: randomUUID(),
+        session_id: sessionId,
+        name,
+        email,
+        password,
+      });
+
+      const user = await knex("users").where({ session_id: sessionId }).first();
+      const updateUserCreatedMeals = await knex("meals")
+        .where({ session_id: sessionId })
+        .update({ user_id: user?.id });
+
+      return reply.status(201).send();
+    } else {
+      sessionId = randomUUID();
+      reply.cookie("sessionId", sessionId, {
+        path: "/",
+      });
+
+      await knex("users").insert({
+        id: randomUUID(),
+        session_id: sessionId,
+        name,
+        email,
+        password,
+      });
+
+      return reply.status(201).send();
+    }
   });
 
   // edit user
