@@ -63,7 +63,7 @@ export async function mealsRoutes(app: FastifyInstance) {
         .first();
       await knex("meals").insert({
         id: randomUUID(),
-        session_id: sessionLinkedUser?.session_id,
+        session_id: sessionId,
         user_id: sessionLinkedUser?.id,
         name,
         description,
