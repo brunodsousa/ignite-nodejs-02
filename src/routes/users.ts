@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { randomUUID } from "crypto";
-import { string, z } from "zod";
+import { z } from "zod";
 import { knex } from "../database";
 
 export async function usersRoutes(app: FastifyInstance) {
