@@ -7,7 +7,7 @@ export async function usersRoutes(app: FastifyInstance) {
   // get all users
   app.get("/", async () => {
     const users = await knex("users").select();
-    return users;
+    return { users };
   });
 
   // get user by id
@@ -49,7 +49,8 @@ export async function usersRoutes(app: FastifyInstance) {
       });
 
       const user = await knex("users").where({ session_id: sessionId }).first();
-      const updateUserCreatedMeals = await knex("meals")
+
+      await knex("meals")
         .where({ session_id: sessionId })
         .update({ user_id: user?.id });
 
@@ -79,6 +80,7 @@ export async function usersRoutes(app: FastifyInstance) {
     });
 
     const { id } = getUserParamSchema.parse(request.params);
+    const { sessionId } = request.cookies;
 
     const user = await knex("users").where({ id }).first();
 
@@ -86,21 +88,24 @@ export async function usersRoutes(app: FastifyInstance) {
       return reply.status(404).send("User not found.");
     }
 
-    const editUserParamSchema = z.object({
-      name: z.string().optional(),
-      email: z.string().optional(),
-      password: z.string().optional(),
-    });
-
-    const { name, email, password } = editUserParamSchema.parse(request.body);
-
-    await knex("users")
-      .where({ id })
-      .update({
-        name: name || user.name,
-        email: email || user.email,
-        password: password || user.password,
+    if (sessionId == user.session_id) {
+      const editUserBodySchema = z.object({
+        name: z.string().optional(),
+        email: z.string().optional(),
+        password: z.string().optional(),
       });
+
+      const { name, email, password } = editUserBodySchema.parse(request.body);
+
+      await knex("users").where({ id, session_id: sessionId }).update({
+        name,
+        email,
+        password,
+      });
+
+      return reply.status(204).send();
+    }
+    return reply.status(401).send("Unauthorized.");
   });
 
   // delete user
