@@ -21,7 +21,7 @@ export async function usersRoutes(app: FastifyInstance) {
     const user = await knex("users").where({ id }).first();
 
     if (!user) {
-      return reply.status(404).send("User not found.");
+      return reply.status(404).send({ error: "User not found" });
     }
 
     return user;
@@ -85,7 +85,7 @@ export async function usersRoutes(app: FastifyInstance) {
     const user = await knex("users").where({ id }).first();
 
     if (!user) {
-      return reply.status(404).send("User not found.");
+      return reply.status(404).send({ error: "User not found" });
     }
 
     if (sessionId == user.session_id) {
@@ -105,7 +105,7 @@ export async function usersRoutes(app: FastifyInstance) {
 
       return reply.status(204).send();
     }
-    return reply.status(401).send("Unauthorized.");
+    return reply.status(401).send({ error: "Unauthorized" });
   });
 
   // delete user
@@ -119,7 +119,7 @@ export async function usersRoutes(app: FastifyInstance) {
     const user = await knex("users").where({ id }).first();
 
     if (!user) {
-      return reply.status(404).send("User not found.");
+      return reply.status(404).send({ error: "User not found" });
     }
 
     await knex("users").where({ id }).del();
