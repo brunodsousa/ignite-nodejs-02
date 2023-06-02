@@ -46,6 +46,36 @@ export async function mealsRoutes(app: FastifyInstance) {
     }
   );
 
+  // get summary
+  app.get(
+    "/summary",
+    { preHandler: [checkSessionIdExists] },
+    async (request) => {
+      const { sessionId } = request.cookies;
+      const meals = await knex("meals")
+        .where({ session_id: sessionId })
+        .select();
+      const totalMealsRegistered = await knex("meals")
+        .where({ session_id: sessionId })
+        .count({ count: "*" })
+        .first();
+      const totalMealsInTheDiet = await knex("meals")
+        .where({ session_id: sessionId, is_on_the_diet: true })
+        .count({ count: "*" })
+        .first();
+      const totalOffDietMeals = await knex("meals")
+        .where({ session_id: sessionId, is_on_the_diet: false })
+        .count({ count: "*" })
+        .first();
+      return {
+        meals: meals,
+        totalRegistered: totalMealsRegistered?.count,
+        totalInTheDiet: totalMealsInTheDiet?.count,
+        totalOffDiet: totalOffDietMeals?.count,
+      };
+    }
+  );
+
   // create meal
   app.post("/", async (request, reply) => {
     const createMealBodySchema = z.object({
